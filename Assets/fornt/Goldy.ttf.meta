@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 6971ab078297c7f4098447a41169bbfc
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Goldy FREE
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c46476e5a5c181a45b29e60182c4a8dc, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
