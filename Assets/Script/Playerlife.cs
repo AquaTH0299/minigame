@@ -31,8 +31,8 @@ public class Playerlife : MonoBehaviour
         Invoke("ReLoadLevel",.75f);
         deadthSound.Play();
     }
-    void ReLoadLevel()
+    public void ReLoadLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

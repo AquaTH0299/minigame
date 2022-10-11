@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 6607749175239056125}
   - component: {fileID: 6607749175239056126}
   - component: {fileID: 6607749175239056127}
+  - component: {fileID: 8677003319198213519}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -65,7 +66,7 @@ Transform:
   m_GameObject: {fileID: 6607749175239056104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.14, y: 2.19, z: -1.68}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.628182, z: 1}
   m_Children:
   - {fileID: 6607749175437800083}
   - {fileID: 6607749175141276290}
@@ -191,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  jumpSpace: 8
+  jumpSpace: 5
   ground:
     serializedVersion: 2
     m_Bits: 64
@@ -485,6 +486,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8677003319198213519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607749175239056104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 5a8fb02b5a5852b44b35116787fc8cc4, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &6607749175437800086
 GameObject:
   m_ObjectHideFlags: 0

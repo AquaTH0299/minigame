@@ -8,4 +8,8 @@ public class StartScreen : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+    public void PressPrivacyPolicy(string link)
+    {
+        Application.OpenURL(link);
+    }
 }
