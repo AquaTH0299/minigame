@@ -8,7 +8,7 @@ public class GetGold : MonoBehaviour
 {
     [SerializeField] AudioSource getCoinsSound;
     [SerializeField] TextMeshProUGUI coinsText;
-    int coins = 0;
+    static  int coins = 0;
     private void OnTriggerEnter(Collider other) 
     {
         if (other.gameObject.CompareTag("Coin"))

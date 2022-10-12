@@ -7,7 +7,6 @@ using UnityEngine;
 public class Playermovement : MonoBehaviour
 {
     [SerializeField] float speed = 10f;
-    [SerializeField] float mainrotate = 0f;
     [SerializeField] float jumpSpace = 5f;
     [SerializeField] LayerMask ground;
     [SerializeField] Transform groundCheck;
