@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
+using UnityEngine.Purchasing.Security;
 
 public class IAP_Manager : MonoBehaviour, IStoreListener
 {
@@ -71,8 +72,33 @@ public class IAP_Manager : MonoBehaviour, IStoreListener
 
     private bool IsInitialized()
     {
-
         return m_StoreController != null && m_StoreExtensionProvider != null;
+    }
+
+    public bool CanShowShop()
+    {
+        //if IAP shop are not init yet, do not show shop
+        if (!IsInitialized())
+        {
+            return false;
+        }
+
+        //check list ID, if has just one productID is active, then show shop (return true), because shop has content
+        foreach (var productId in id)
+        {
+            var product = m_StoreController.products.WithID(productId);
+
+            if (product != null)
+            {
+                if (product.availableToPurchase)
+                {
+                    //found one product that can buy
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public string GetPrice(string productId)
@@ -86,6 +112,39 @@ public class IAP_Manager : MonoBehaviour, IStoreListener
             return product.metadata.localizedPriceString;
         }
         return "loading...";
+    }
+
+    public string GetName(string productId)
+    {
+        if (!IsInitialized()) return "loading...";
+
+        Product product = m_StoreController.products.WithID(productId);
+
+        if (product != null)
+        {
+            return product.metadata.localizedTitle;
+        }
+        return "loading...";
+    }
+
+    public bool CanShowItem(string productId)
+    {
+        if (!IsInitialized()) return false;
+
+        Product product = m_StoreController.products.WithID(productId);
+
+        if (product != null)
+        {
+            if (product.availableToPurchase)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
     public void BuyProductID(string productId, Action<bool> callBack = null)
@@ -210,25 +269,57 @@ public class IAP_Manager : MonoBehaviour, IStoreListener
 
     public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
     {
+        bool validPurchase = true; // Presume valid for platforms with no R.V.
 
-        int count = 0;
-        foreach (var product in _arrProducts)
+        // Unity IAP's validation logic is only included on these platforms.
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE_OSX
+
+        try
         {
-            if (String.Equals(args.purchasedProduct.definition.id, product._ProductID, StringComparison.Ordinal))
+            // Prepare the validator with the secrets we prepared in the Editor
+            // obfuscation window.
+            var validator = new CrossPlatformValidator(GooglePlayTangle.Data(),
+                AppleTangle.Data(), Application.identifier);
+            // On Google Play, result has a single product ID.
+            // On Apple stores, receipts contain multiple products.
+            var result = validator.Validate(args.purchasedProduct.receipt);
+            // For informational purposes, we list the receipt(s)
+            Debug.Log("Receipt is valid. Contents:");
+            foreach (IPurchaseReceipt productReceipt in result)
             {
-                Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
-                count++;
+                Debug.Log(productReceipt.productID);
+                Debug.Log(productReceipt.purchaseDate);
+                Debug.Log(productReceipt.transactionID);
             }
         }
-
-        if (count == 0)
+        catch (IAPSecurityException)
         {
-            Debug.Log(string.Format("ProcessPurchase: FAIL. Unrecognized product: '{0}'", args.purchasedProduct.definition.id));
+            Debug.Log("Invalid receipt, not unlocking content");
+            validPurchase = false;
         }
-        else
+#endif
+
+        if (validPurchase)
         {
-            if (callBackBuyProduct != null)
-                callBackBuyProduct.Invoke(true);
+            int count = 0;
+            foreach (var product in _arrProducts)
+            {
+                if (String.Equals(args.purchasedProduct.definition.id, product._ProductID, StringComparison.Ordinal))
+                {
+                    Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
+                    count++;
+                }
+            }
+
+            if (count == 0)
+            {
+                Debug.Log(string.Format("ProcessPurchase: FAIL. Unrecognized product: '{0}'", args.purchasedProduct.definition.id));
+            }
+            else
+            {
+                if (callBackBuyProduct != null)
+                    callBackBuyProduct.Invoke(true);
+            }
         }
 
         return PurchaseProcessingResult.Complete;
